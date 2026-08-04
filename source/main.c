@@ -10,20 +10,22 @@ int main(int argc, char* argv[])
 
 	gfxInitDefault();
 	consoleInit(GFX_TOP, NULL);
+	touchPosition touch;
 
     // Title \n makes a new line
-	printf("3ds Button Tester\n By Stefan B\n");
-
-
+	printf("\033[31m                3ds Button Tester                 \033[0m");
+	printf("                By: Stefan Burner                 ");
+	printf("\033[36m    Press START to return to the Homebrew Menu.   \033[0m");
+	printf("\033[32m        Press A + B To clear the Console.         \033[0m\n");
 	//Mount SD Card (for future file manage tool)
 
-	Result rc = qtmcInit();
-	if (R_FAILED(rc)) {
-		printf("Failed to initialize SD card: %08lX\n", rc);
-	} else {
-		printf("SD card initialized successfully.\n");
-		printf("Warning:\n The C stick is very sensitive\n");
-	}
+//	Result rc = qtmcInit();
+//	if (R_FAILED(rc)) {
+//		printf("Failed to initialize SD card: %08lX\n", rc);
+//	} else {
+//		printf("SD card initialized successfully.\n");
+//		printf("Warning:\n The C stick is very sensitive\n");
+//	}
 
 
 
@@ -64,8 +66,13 @@ int main(int argc, char* argv[])
 			printf("LT \n");
 		if (kDown & KEY_R)
 			printf("RT\n");
-		if (kDown & KEY_TOUCH)
-			printf("TouchScreen\n");
+		if (kDown & KEY_TOUCH){
+			hidTouchRead(&touch);
+			printf("\x1b[5;0hTouch Sensed at X: %03d, Y: %03d\n", touch.px, touch.py);
+		}
+
+
+
 		if (kHeld & KEY_CSTICK_DOWN)
 			printf("cDown\n");
 		if (kHeld & KEY_CSTICK_UP)
@@ -79,7 +86,7 @@ int main(int argc, char* argv[])
 		if (kDown & KEY_ZR)
 			printf("ZR\n");
 		if ((kDown & KEY_B) && (kDown & KEY_A))
-			printf("A+B\n");
+			consoleClear();
 
 
 
