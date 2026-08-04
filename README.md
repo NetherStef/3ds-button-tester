@@ -15,6 +15,11 @@ $ $DEVKITPRO/tools/bin/3dslink application.3dsx
 
 and it will show up on your 3ds
 
+For users using windows or other operating systems
+
+follow the instructions to make the base devkitpro template
+and it should work correctly.
+
 Changelogs
 Added the On screen keyboard if X + Y are pressed.
 Changed kDown to kHeld on dual inputs to get more accurate input.
