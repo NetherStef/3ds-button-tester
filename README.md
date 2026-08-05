@@ -17,12 +17,8 @@ and it will show up on your 3ds
 
 For users using windows or other operating systems
 
-follow the instructions to make the base devkitpro template
-and it should work correctly.
+follow the instructions to make the base devkitpro template and it should work correctly.
 
-Changelogs
-Added the On screen keyboard if X + Y are pressed.
-Changed kDown to kHeld on dual inputs to get more accurate input.
-Added version number 
-Changed the homebrew return buttons to LT and RT.
-Changed my name to my username.
+Changelogs v1.2.0
+Added side shortcut bar
+Added shortcut to check battery level

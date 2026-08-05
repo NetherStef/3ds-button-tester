@@ -12,31 +12,22 @@ int main(int argc, char* argv[])
 	consoleInit(GFX_TOP, &topConsole);
 	consoleSelect(&topConsole);
 	touchPosition touch;
+	ptmuInit();
 
-	printf("\x1b[1;0H\033[31m           3ds Button Tester v1.1.2               \033[0m\n");
+	//VERT HORZ
+	//[1;0H
+
+	printf("\x1b[1;0H\033[31m             3ds Button Tester v1.2.0             \033[0m");
 	printf("\x1b[2;0H                 By:  NetherStef                  \n");
-	printf("\x1b[3;0H\033[36m   Press LT + RT to return to the Homebrew Menu.  \033[0m\n");
-	printf("\x1b[4;0H\033[32m         Press A + B To clear the Console.        \033[0m\n");
-	printf("\x1b[5;0H         Press X + Y To open the keyboard.        \n");
-	printf("\x1b[6;0H--------------------------------------------------\n");
-
-// dont touch 24 it loves that.
-// also this just tells it the starting and ending like on the console
-	consoleSetWindow(&topConsole, 0, 7, 50, 24);
-
-// future sd card mount code block
-
-//	Result rc = qtmcInit();
-//	if (R_FAILED(rc)) {
-//		printf("Failed to initialize SD card: %08lX\n", rc);
-//	} else {
-//		printf("SD card initialized successfully.\n");
-//		printf("Warning:\n The C stick is very sensitive\n");
-//	}
+	printf("\x1b[3;0H--------------------------------------------------\n");
+	printf("\x1b[4;35H\033[32mShortcuts:\033[0m");
+	printf("\x1b[5;35HLT+RT : Return");
+	printf("\x1b[6;35HA+B   : Clear");
+	printf("\x1b[7;35HX+Y   : Type");
+	printf("\x1b[8;35HST + SLT : Power");
 
 
-
-
+	consoleSetWindow(&topConsole, 0, 4, 33, 22);
 
 	// Main loop
 	while (aptMainLoop())
@@ -77,10 +68,8 @@ int main(int argc, char* argv[])
 			printf("RT\n");
 		if (kDown & KEY_TOUCH){
 			hidTouchRead(&touch);
-			printf("\x1b[5;0h%03d,%03d\n", touch.px, touch.py);
+			printf("\x1b[5;0hX:%03d\nY:%03d\n", touch.px, touch.py);
 		}
-
-
 
 		if (kDown & KEY_CSTICK_DOWN)
 			printf("cDown\n");
@@ -96,7 +85,7 @@ int main(int argc, char* argv[])
 			printf("ZR\n");
 		if ((kHeld & KEY_B) && (kHeld & KEY_A))
 			consoleClear();
-		// Add on screen keyboard when X and Y are pressed, then output that text or cancel and make new // line.
+		// Add on screen keyboard when X and Y are pressed, then output that text or cancel and make new line.
 		if ((kHeld & KEY_X) && (kHeld & KEY_Y)){
 			static char kbBuffer[100];
 			SwkbdState swkbd;
@@ -113,11 +102,23 @@ int main(int argc, char* argv[])
 		//Return to hb menu with LT and RT
 		if ((kHeld & KEY_R) && (kHeld & KEY_L))
 			break;
+		//Return to hb menu with LT and RT
+		if ((kHeld & KEY_START) && (kHeld & KEY_SELECT))
+		{
+			u8 batteryLevel = 0;
+			u8 isCharging = 0;
+			PTMU_GetBatteryLevel(&batteryLevel);
+			PTMU_GetBatteryChargeState(&isCharging);
 
-
-
+			printf("Battery Level: %d / 5 ", batteryLevel);
+			if (isCharging) {
+				printf("Charging\n");
+			} else {
+				printf("Disconnected\n\n");
+			}
+		}
 	}
-
+	ptmuExit();
 	gfxExit();
 	return 0;
 }
